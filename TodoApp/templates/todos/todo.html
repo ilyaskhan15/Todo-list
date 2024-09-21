@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo List CRUD</title>
+</head>
+<body>
+    <h1>ToDo List</h1>
+
+    <!-- Form for creating or updating a ListItem -->
+    <form method="POST" action="{% if list_item %}{% url 'list_item_crud' list_item.id %}{% else %}{% url 'list_item_crud' %}{% endif %}">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Title" value="{% if list_item %}{{ list_item.title }}{% endif %}" required><br>
+        <textarea name="description" placeholder="Description">{% if list_item %}{{ list_item.description }}{% endif %}</textarea><br>
+        <label>
+            <input type="checkbox" name="is_completed" {% if list_item and list_item.is_completed %}checked{% endif %}> Completed
+        </label><br>
+        <input type="date" name="due_date" value="{% if list_item %}{{ list_item.due_date }}{% endif %}" required><br>
+        <button type="submit">{% if list_item %}Update{% else %}Create{% endif %}</button>
+    </form>
+
+    <!-- List all ListItems -->
+    <ul>
+        {% for item in list_items %}
+            <li>
+                {{ item.title }} - {{ item.description }} (Due: {{ item.due_date }})
+                {% if item.is_completed %}
+                    <strong>(Completed)</strong>
+                {% endif %}
+                <a href="{% url 'list_item_crud' item.id %}">Edit</a>
+                <a href="{% url 'list_item_delete' item.id %}">Delete</a>
+            </li>
+        {% endfor %}    
+    </ul>
+</body>
+</html>
