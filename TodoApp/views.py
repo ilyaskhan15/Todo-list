@@ -12,23 +12,17 @@ def list_item_crud(request, id=None):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        is_completed = 'is_completed' in request.POST
-        due_date = request.POST.get('due_date')
 
         if list_item:
             # Update existing task
             list_item.title = title
             list_item.description = description
-            list_item.is_completed = is_completed
-            list_item.due_date = due_date
             list_item.save()
         else:
             # Create a new task
             ListItem.objects.create(
                 title=title,
                 description=description,
-                is_completed=is_completed,
-                due_date=due_date
             )
         return redirect('list_item_crud')  # Redirect to the main list after saving
 
